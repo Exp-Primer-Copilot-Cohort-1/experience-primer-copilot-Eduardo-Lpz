@@ -1,46 +1,19 @@
-// Create web server
+// Create webserver for comment
+//==================================================================================================
 
+// Import module
 const express = require('express');
-const bodyParser = require('body-parser');
+const router = express.Router();
+const commentController = require('../controllers/commentController');
 
-const app = express();
-const port = 3000;
+// Handle request
+router.get('/', commentController.comment_list);
+router.get('/create', commentController.comment_create_get);
+router.post('/create', commentController.comment_create_post);
+router.get('/:id/delete', commentController.comment_delete_get);
+router.post('/:id/delete', commentController.comment_delete_post);
+router.get('/:id/update', commentController.comment_update_get);
+router.post('/:id/update', commentController.comment_update_post);
+router.get('/:id', commentController.comment_detail);
 
-app.set('view engine', 'ejs');
-app.set('views', './views');
-
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-
-app.get('/', (req, res) => {
-    res.render('index');
-});
-
-app.get('/users', (req, res) => {
-    res.send('Users page');
-});
-
-app.get('/users/:id', (req, res) => {
-    res.send(`User ID: ${req.params.id}`);
-});
-
-app.get('/users/:id/comments', (req, res) => {
-    res.send(`Comment of User ID: ${req.params.id}`);
-});
-
-app.get('/users/:id/comments/:commentId', (req, res) => {
-    res.send(`Comment ID: ${req.params.commentId} of User ID: ${req.params.id}`);
-});
-
-app.get('/search', (req, res) => {
-    res.render('search');
-});
-
-app.post('/search', (req, res) => {
-    console.log(req.body);
-    res.send('Success');
-});
-
-app.listen(port, () => {
-    console.log(`Server listening on port ${port}`);
-});
+module.exports = router;
